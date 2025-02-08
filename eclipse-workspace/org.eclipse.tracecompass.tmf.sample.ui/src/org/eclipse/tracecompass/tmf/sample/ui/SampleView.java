@@ -75,64 +75,6 @@ public class SampleView extends TmfView {
         super(VIEW_ID);
     }
     
-    private Map<Integer, Map<String, Double>> threadExecutionTimes = new HashMap<>();
-
-    // Method to get total execution time per thread
-    public Map<Integer, Double> getThreadExecutionData() {
-        Map<Integer, Double> totalExecutionTimes = new HashMap<>();
-
-        for (Map.Entry<Integer, Map<String, Double>> entry : threadExecutionTimes.entrySet()) {
-            int threadNum = entry.getKey();
-            double totalExecutionTime = 0;
-
-            for (double executionTime : entry.getValue().values()) {
-                totalExecutionTime += executionTime;
-            }
-
-            totalExecutionTimes.put(threadNum, totalExecutionTime);
-        }
-
-        return totalExecutionTimes;
-    }
-
-    // Method to calculate the average execution time without outliers
-    public double calculateAverageExecutionTimeWithoutOutliers() {
-        Map<Integer, Double> totalExecutionTimes = getThreadExecutionData();
-
-        List<Double> executionTimesList = new ArrayList<>(totalExecutionTimes.values());
-
-        
-
-        // Sort execution times to calculate the IQR
-        Collections.sort(executionTimesList);
-
-        int q1Index = executionTimesList.size() / 4;
-        int q3Index = (executionTimesList.size() * 3) / 4;
-        double q1 = executionTimesList.get(q1Index);
-        double q3 = executionTimesList.get(q3Index);
-        double iqr = q3 - q1;
-
-        double lowerBound = q1 - 1.5 * iqr;
-        double upperBound = q3 + 1.5 * iqr;
-
-        // Filter out outliers
-        List<Double> filteredTimes = new ArrayList<>();
-        for (double time : executionTimesList) {
-            if (time >= lowerBound && time <= upperBound) {
-                filteredTimes.add(time);
-            }
-            else {
-            	
-            }
-        }
-
-        // Calculate the average execution time of the filtered list
-        double sum = 0;
-        for (double time : filteredTimes) {
-            sum += time;
-        }
-        return  sum / filteredTimes.size();
-    }
 
 
     @Override
